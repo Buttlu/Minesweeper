@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="main.js" defer></script>
+    <style>
+        #playfield {
+            margin-top: 40px;
+            width: fit-content;
+        }
+
+        .field-row {
+            display: flex;
+        }
+
+        .square {
+            width: 40px;
+            aspect-ratio: 1;
+            margin: 0;
+            border: 1px solid grey;
+        }
+
+        .hidden {
+            background-color: green;
+        }
+
+        .open {
+            background-color: red;
+        }
+
+        .preview {
+            background-color: blue;
+        }
+
+        .flag {
+            background-color: purple;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="settings">
+        <label>Width: <input name="width" value="30" type="number"></label>
+        <label>Height: <input name="height" value="16" type="number"></label>
+        <label>Bombs: <input name="bombs" value="99" type="number"></label>
+        <Button type="submit">Set</Button>
+    </form>
+    <div id="info">
+        <span id="bombs">Bombs: </span><span id="time"></span>
+    </div>
+    <div id="playfield"></div>
+</body>
+
+</html>
