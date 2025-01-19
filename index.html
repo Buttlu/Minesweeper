@@ -7,6 +7,10 @@
     <title>Document</title>
     <script src="main.js" defer></script>
     <style>
+        body {
+            height: 100vh;
+        }
+
         #playfield {
             margin-top: 40px;
             width: fit-content;
@@ -49,7 +53,7 @@
         <Button type="submit">Set</Button>
     </form>
     <div id="info">
-        <span id="bombs">Bombs: </span><span id="time"></span>
+        <span>Bombs: <span id="bombs"></span><span><span id="time"></span></span>
     </div>
     <div id="playfield"></div>
 </body>

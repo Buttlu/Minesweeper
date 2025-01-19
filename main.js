@@ -24,27 +24,46 @@ function setupBoard(e) {
     const width = document.querySelector("input[name='width']").value;
     const height = document.querySelector("input[name='height']").value;
     const bombs = Math.min(document.querySelector("input[name='bombs']").value, width * height - 1);
-    const bombsText = document.getElementById("bombs");
     const timeText = document.getElementById("time");
     field.innerHTML = "";
 
     // prepare the field
     for (let i = 0; i < height; i++) {
-        const row = getRow();
+        const row = createRow();
         for (let j = 0; j < width; j++) {
-            const square = getSquare();
-            square.x = j + 1;
-            square.y = i + 1;
+            const square = createSquare();
+            square.x = j;
+            square.y = i;
             row.appendChild(square);
         }
         field.appendChild(row);
     }
 
-    bombsText.innerText = `Bombs ${bombs}`;
+    bombText(0, bombs);
     timer = 0;
 }
 
-function hideSqaure(e) {
+function placeBombs(bombAmount) {
+    for (let i = 0; i < bombAmount; i++) {
+
+    }
+}
+
+/**
+ * @param {number} change change amount of bombs, -1, 0, or 1
+ * @param {number?} bombAmount used to set a specific amount
+ */
+function bombText(change, bombAmount) {
+    const textField = document.getElementById("bombs");
+    const oldBombs = +textField.innerText;
+    const bombs = bombAmount ?? oldBombs + change;
+    textField.innerText = bombs.toString();
+}
+
+/**
+ * @param {Event} e 
+ */
+function hideSquare(e) {
     if (e.type === "mouseenter")
         if (!mousedown || e.buttons == 2) return;
 
@@ -61,24 +80,35 @@ function hideSqaure(e) {
         square.removeEventListener("mouseleave", this);
     });
 }
-
-// handles if left or right click
+/**
+ * handles if left or right click
+ * @param {Event} e 
+ */
 function clickHandler(e) {
-    if (e.button === 0) hideSqaure(e);
+    if (e.button === 0) hideSquare(e);
     else if (e.button === 2) placeFlag(e);
 }
 
+/**
+ * @param {Event} e 
+ */
 function placeFlag(e) {
     const square = e.target;
     if (square.classList.contains("open")) return;
 
     if (!square.classList.contains("flag")) {
         square.classList.add("flag");
+        bombText(-1, undefined);
+
     } else {
         square.classList.remove("flag");
+        bombText(1, undefined);
     }
 }
 
+/**
+ * @param {Event} e 
+ */
 function revealSquare(e) {
     const square = e.target;
     square.classList.remove("hidden");
@@ -91,20 +121,20 @@ function revealSquare(e) {
 /**
  * @returns a row in the field
  */
-function getRow() {
+function createRow() {
     const row = document.createElement("div");
     row.classList.add("field-row");
     return row;
 }
 
 /**
- * @returns {HTMLElement}
+ * @returns A single square as a div-element
  */
-function getSquare() {
+function createSquare() {
     const square = document.createElement("div");
     square.classList.add("square");
     square.classList.add("hidden");
     square.addEventListener("mousedown", clickHandler);
-    square.addEventListener("mouseenter", hideSqaure);
+    square.addEventListener("mouseenter", hideSquare);
     return square;
 }
