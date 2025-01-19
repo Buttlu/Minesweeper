@@ -6,6 +6,8 @@ field.ondragstart = (e) => false;
 
 let timer = 0;
 
+const bombsList = [];
+
 // setup to handle mousedown when dragging over squares
 let mousedown = false;
 document.body.addEventListener("mousedown", e => mousedown = true);
@@ -40,12 +42,26 @@ function setupBoard(e) {
     }
 
     bombText(0, bombs);
+    placeBombs(bombs, width, height);
     timer = 0;
 }
 
-function placeBombs(bombAmount) {
+function placeBombs(bombAmount, width, height) {
+    const squares = document.getElementsByClassName("field-row");
     for (let i = 0; i < bombAmount; i++) {
+        const x = Math.floor(Math.random() * width);
+        const y = Math.floor(Math.random() * height);
 
+        // skip if already bomb
+        if (bombsList[x] && bombsList[x][y]) {
+            console.log("occupied")
+            i--;
+            continue;
+        }
+
+        bombsList[x] = [];
+        bombsList[x][y] = true;
+        squares[y].children[x].style.backgroundColor = "yellow";
     }
 }
 
@@ -80,6 +96,7 @@ function hideSquare(e) {
         square.removeEventListener("mouseleave", this);
     });
 }
+
 /**
  * handles if left or right click
  * @param {Event} e 
@@ -116,6 +133,13 @@ function revealSquare(e) {
     square.classList.add("open");
     square.removeEventListener("mousedown", clickHandler);
     square.removeEventListener("mouseup", revealSquare);
+
+    const x = square.x;
+    const y = square.y;
+    if (bombsList[x] && bombsList[x][y]) {
+        // lose game 
+        console.log("you lost, please restart");
+    }
 }
 
 /**
